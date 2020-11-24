@@ -85,7 +85,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <Button
-            android:id="@+id/activity_inicio_bt_iniciar"
+            android:id="@+id/activity_selecao_bt_iniciar"
             style="@style/Widget.AppCompat.Button"
             android:layout_width="0dp"
             android:layout_height="40dp"

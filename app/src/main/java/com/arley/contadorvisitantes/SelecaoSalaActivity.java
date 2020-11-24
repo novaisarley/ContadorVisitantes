@@ -40,19 +40,24 @@ public class SelecaoSalaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selecao_sala);
 
+        btIniciar = findViewById(R.id.activity_selecao_bt_iniciar);
+        spinnerSala = findViewById(R.id.activity_selecao_sala_spinner_sala);
+        progressBar = findViewById(R.id.activity_selecao_sala_progressBar);
+
+
         if (!getCurrentSala().trim().isEmpty()){
             startActivity(new Intent(SelecaoSalaActivity.this, ContagemActivity.class));
-            finish();
         }
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = mFirebaseDatabase.getReference("Salas");
 
-        btIniciar = findViewById(R.id.activity_inicio_bt_iniciar);
-        spinnerSala = findViewById(R.id.activity_selecao_sala_spinner_sala);
-        progressBar = findViewById(R.id.activity_selecao_sala_progressBar);
-
         progressBar.setVisibility(View.VISIBLE);
+
+        setListeners();
+
+        btIniciar.setClickable(false);
+        btIniciar.setFocusable(false);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -85,6 +90,7 @@ public class SelecaoSalaActivity extends AppCompatActivity {
         btIniciar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setCurrentSala(spinnerSala.getSelectedItem().toString());
                 startActivity(new Intent(SelecaoSalaActivity.this, ContagemActivity.class));
             }
         });
@@ -96,6 +102,9 @@ public class SelecaoSalaActivity extends AppCompatActivity {
 
         spinnerSala.setAdapter(adapter);
         progressBar.setVisibility(View.GONE);
+
+        btIniciar.setClickable(true);
+        btIniciar.setFocusable(true);
     }
 
     void setCurrentSala(String sala){
