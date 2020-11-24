@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -52,6 +53,8 @@ public class ContagemActivity extends AppCompatActivity {
         btIncrementar = findViewById(R.id.activity_contagem_bt_incrementar);
         btDecrementar = findViewById(R.id.activity_contagem_bt_decrementar);
 
+        progressBar = findViewById(R.id.activity_contagem_progressbar);
+
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
 
@@ -63,8 +66,17 @@ public class ContagemActivity extends AppCompatActivity {
         databaseReference.child(getResources().getString(R.string.salas_horarios)).child(getCurrentSala()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                long size = snapshot.getChildrenCount();
-                tvNumVisitantes.setText(Integer.toString((int)size));
+                long length = snapshot.getChildrenCount();
+                String size = "0";
+
+                if ((int) length == 0) {
+                    size = "0";
+                } else {
+                    size = Integer.toString((int) length - 1);
+                }
+
+                tvNumVisitantes.setText(size);
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
@@ -79,6 +91,9 @@ public class ContagemActivity extends AppCompatActivity {
         btIncrementar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
+                btIncrementar.setClickable(false);
+
                 Calendar calendar = Calendar.getInstance();
                 String currentDate = DateFormat.getDateInstance().format(calendar.getTime());
 
@@ -95,7 +110,17 @@ public class ContagemActivity extends AppCompatActivity {
 
                 Horario horario = new Horario(time, currentDate);
 
-                databaseReference.child(getResources().getString(R.string.salas_horarios)).child(getCurrentSala()).child(UUID.randomUUID().toString()).setValue(horario);
+                databaseReference.child(getResources().getString(R.string.salas_horarios)).child(getCurrentSala()).
+                        child(UUID.randomUUID().toString()).setValue(horario).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        progressBar.setVisibility(View.GONE);
+                        btIncrementar.setClickable(true);
+                    }
+                });
+
+                databaseReference.child(getResources().getString(R.string.salas_horarios)).child(getCurrentSala()).
+                        child("nome").setValue(getCurrentSala());
 
 
             }

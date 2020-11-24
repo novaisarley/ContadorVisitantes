@@ -9,9 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ContadorVisitantes">
-        <activity android:name=".ListaSalasActivity"></activity>
-        <activity android:name=".ContagemActivity" />
-        <activity android:name=".SelecaoSalaActivity">
+        <activity android:name=".ListaSalasActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".ContagemActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".SelecaoSalaActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
