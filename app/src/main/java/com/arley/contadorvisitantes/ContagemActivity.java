@@ -92,7 +92,6 @@ public class ContagemActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
-                btIncrementar.setClickable(false);
 
                 Calendar calendar = Calendar.getInstance();
                 String currentDate = DateFormat.getDateInstance().format(calendar.getTime());
@@ -115,13 +114,11 @@ public class ContagemActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         progressBar.setVisibility(View.GONE);
-                        btIncrementar.setClickable(true);
                     }
                 });
 
                 databaseReference.child(getResources().getString(R.string.salas_horarios)).child(getCurrentSala()).
                         child("nome").setValue(getCurrentSala());
-
 
             }
         });

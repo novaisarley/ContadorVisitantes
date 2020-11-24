@@ -44,9 +44,9 @@ public class SelecaoSalaActivity extends AppCompatActivity {
         spinnerSala = findViewById(R.id.activity_selecao_sala_spinner_sala);
         progressBar = findViewById(R.id.activity_selecao_sala_progressBar);
 
-        if (!getCurrentSala().trim().isEmpty()){
+        /*if (!getCurrentSala().trim().isEmpty()){
             startActivity(new Intent(SelecaoSalaActivity.this, ContagemActivity.class));
-        }
+        }*/
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = mFirebaseDatabase.getReference("Salas");
