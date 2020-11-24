@@ -34,7 +34,6 @@ public class ContagemActivity extends AppCompatActivity {
     ProgressBar progressBar;
 
     SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
 
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;

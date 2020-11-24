@@ -7,12 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,7 +35,8 @@ public class SelecaoSalaActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
 
     FirebaseDatabase mFirebaseDatabase;
-    DatabaseReference databaseReference;
+    DatabaseReference databaseRefSala;
+    DatabaseReference databaseRefSalaHorarios;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +52,8 @@ public class SelecaoSalaActivity extends AppCompatActivity {
         }*/
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = mFirebaseDatabase.getReference("Salas");
+        databaseRefSala = mFirebaseDatabase.getReference("Salas");
+        databaseRefSalaHorarios = mFirebaseDatabase.getReference(getResources().getString(R.string.salas_horarios));
 
         progressBar.setVisibility(View.VISIBLE);
 
@@ -58,11 +62,37 @@ public class SelecaoSalaActivity extends AppCompatActivity {
         btIniciar.setClickable(false);
         btIniciar.setFocusable(false);
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseRefSala.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<String> salas = (ArrayList<String>) snapshot.getValue();
-                preencherSpinner(salas);
+
+                if (snapshot.exists()) {
+                    DataSnapshot dataSnapshotSala = snapshot;
+                    ValueEventListener eventListener = databaseRefSalaHorarios.
+                            addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    for (DataSnapshot dataSnapshot : dataSnapshotSala.getChildren()) {
+                                        databaseRefSalaHorarios.child(dataSnapshot.getValue().toString()).
+                                                child("nome").setValue(dataSnapshot.getValue().toString());
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+
+                    databaseRefSalaHorarios.removeEventListener(eventListener);
+
+                    List<String> salas = (ArrayList<String>) snapshot.getValue();
+                    preencherSpinner(salas);
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(SelecaoSalaActivity.this, "Nenhuma sala cadastrada", Toast.LENGTH_LONG).show();
+                }
+
             }
 
             @Override
@@ -73,7 +103,7 @@ public class SelecaoSalaActivity extends AppCompatActivity {
 
     }
 
-    void setListeners(){
+    void setListeners() {
         spinnerSala.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -95,7 +125,7 @@ public class SelecaoSalaActivity extends AppCompatActivity {
         });
     }
 
-    public void preencherSpinner(List<String> salas){
+    public void preencherSpinner(List<String> salas) {
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, salas);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -106,14 +136,14 @@ public class SelecaoSalaActivity extends AppCompatActivity {
         btIniciar.setFocusable(true);
     }
 
-    void setCurrentSala(String sala){
+    void setCurrentSala(String sala) {
         sharedPreferences = getSharedPreferences(getString(R.string.pref_key), MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.putString(getString(R.string.current_sala), sala);
         editor.apply();
     }
 
-    String getCurrentSala(){
+    String getCurrentSala() {
         sharedPreferences = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE);
         String sala = sharedPreferences.getString(getString(R.string.current_sala), "");
 
