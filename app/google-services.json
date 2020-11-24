@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "265175217675",
+    "firebase_url": "https://contador-visitantes.firebaseio.com",
+    "project_id": "contador-visitantes",
+    "storage_bucket": "contador-visitantes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:265175217675:android:986318ad254551300fb90e",
+        "android_client_info": {
+          "package_name": "com.arley.contadorvisitantes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "265175217675-qk8frpbm9sbo2vrso3jpcquvcdmsa674.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.arley.contadorvisitantes",
+            "certificate_hash": "1195fa7121ae395f1a54516a894820e1a74b1810"
+          }
+        },
+        {
+          "client_id": "265175217675-3vqgg2thritt5226qa7t91ijtveiuluv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9KiTXo1WrvH-6HwPQhOOXlE1ufv7IHgI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "265175217675-3vqgg2thritt5226qa7t91ijtveiuluv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
